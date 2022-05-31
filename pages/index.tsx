@@ -9,7 +9,6 @@ import Download from "../components/Download";
 import Feature from "../components/Feature";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Navigation from "../components/Navigation";
 import ScreenShot from "../components/ScreenShot";
 import SmallFeature from "../components/SmallFeature";
 import Statistics from "../components/Statistics";
@@ -20,8 +19,6 @@ const Home: NextPage = () => {
   return (
     <div className="App">
       {/* <Preloader /> */}
-
-      <Navigation />
 
       <Header />
       <SmallFeature />
