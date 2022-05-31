@@ -4,7 +4,7 @@ export default function Layout({ children }: any) {
   return (
     <>
       <Navigation />
-      {children}
+      <div style={{ paddingTop: "12rem" }}>{children}</div>
       <style jsx global>
         {`
           .active {

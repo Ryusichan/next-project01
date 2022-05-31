@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import router from "next/router";
 import React from "react";
 
 const Navigation = () => {
@@ -46,6 +48,18 @@ const Navigation = () => {
               <a className="nav-link page-scroll" href="#screens">
                 SCREENS
               </a>
+            </li>
+            <li className="nav-item">
+              <Link href="/admin">
+                <a
+                  className="nav-link page-scroll"
+                  // onClick={() => {
+                  //   router.push("/admin");
+                  // }}
+                >
+                  admin
+                </a>
+              </Link>
             </li>
 
             {/* Dropdown Menu*/}
