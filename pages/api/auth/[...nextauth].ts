@@ -1,5 +1,10 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaClient } from "@prisma/client";
+import { verifyPassword } from "../../../lib/auth";
+
+// prisma server 소환
+let prisma = new PrismaClient();
 
 export default NextAuth({
   providers: [
@@ -18,22 +23,34 @@ export default NextAuth({
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
+      // prisma DB에서 유저 정보를 비교하는 루틴
+      async authorize(credentials: any) {
+        const user = await prisma.user.findUnique({
+          //credentials 변수의 email과 같은걸 찾는다
+          where: {
+            // 에러 체크를 위해 String(credentials.email) 식으로 강제로 string 타입화
+            email: String(credentials.email),
+          },
+          select: {
+            name: true,
+            email: true,
+            password: true,
+          },
+        });
 
-        if (
-          credentials?.email === "testuser@email.com" &&
-          credentials.password === "test"
-        ) {
-          const user = {
-            id: 1,
-            name: "test user",
-            email: "testuser@example.com",
-          };
-          return user;
+        if (!user) {
+          throw new Error("No user found!");
         }
 
-        return null;
+        const isValid = await verifyPassword(
+          credentials.password,
+          user.password
+        );
+
+        if (!isValid) {
+          throw new Error("Could not log you in!");
+        }
+        return { name: user.name, email: user.email };
       },
       // You can also Reject this callback with an Error or with a URL:
       // throw new Error("error message") // Redirect to error page

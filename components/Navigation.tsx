@@ -10,6 +10,8 @@ const Navigation = () => {
   const [menuToggle, setMenuToggle] = useState(false);
   const { data: session, status } = useSession();
 
+  const userEmail = session?.user?.email;
+
   if (status === "authenticated") console.log("session", session);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
@@ -102,10 +104,13 @@ const Navigation = () => {
         </div>
 
         {status === "authenticated" ? (
-          <button onClick={() => signOut()}>Log out</button>
+          <>
+            {userEmail}
+            <button onClick={() => signOut()}>Log out</button>
+          </>
         ) : (
           <>
-            <Link href="/api/auth/signin">
+            <Link href="/login">
               <a>Log in</a>
             </Link>
             <Link href="/signup">
