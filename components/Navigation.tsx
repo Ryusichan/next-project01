@@ -1,11 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import router from "next/router";
-import React from "react";
+import React, { useState } from "react";
+
+import { signOut, useSession } from "next-auth/react";
 
 const Navigation = () => {
   const Logo = "/logo.svg";
+  const [menuToggle, setMenuToggle] = useState(false);
+  const { data: session, status } = useSession();
 
+  if (status === "authenticated") console.log("session", session);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
       <div className="container">
@@ -95,6 +100,19 @@ const Navigation = () => {
             </a>
           </span>
         </div>
+
+        {status === "authenticated" ? (
+          <button onClick={() => signOut()}>Log out</button>
+        ) : (
+          <>
+            <Link href="/api/auth/signin">
+              <a>Log in</a>
+            </Link>
+            <Link href="/signup">
+              <a>Signup</a>
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
